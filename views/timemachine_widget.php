@@ -1,9 +1,9 @@
 <div class="col-lg-4 col-md-6">
     <div class="card" id="time-machine-status-widget">
-            <div class="card-heading" data-container="body" title="">
+            <div class="card-header" data-container="body" title="">
                 <i class="fa fa-clock-o"></i>
                 <span data-i18n="timemachine.timemachine"></span>
-                <a href="/show/listing/timemachine/timemachine" class="pull-right"><i class="fa fa-list"></i></a>
+                <a href="/show/listing/timemachine/timemachine" class="pull-right text-reset"><i class="fa fa-list"></i></a>
             </div>
         <div class="card-body text-center"></div>
     </div><!-- /card -->
@@ -18,7 +18,7 @@ $(document).on('appUpdate', function(e, lang) {
     		//alert(data.error);
     		return;
     	}
-		
+
 		var card = $('#time-machine-status-widget div.card-body'),
 			baseUrl = appUrl + '/show/listing/timemachine/timemachine';
 		card.empty();
