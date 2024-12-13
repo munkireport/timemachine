@@ -92,26 +92,26 @@ class Timemachine_model extends \Model
             throw new Exception("Error Processing Time Machine Module Request: No data found", 1);
         } else if (substr( $data, 0, 30 ) != '<?xml version="1.0" encoding="' ) { // Else if old style text, process with old text based handler
         
-        // Parse log data
-        $start = ''; // Start date
-        foreach (explode("\n", $data) as $line) {
-            $date = substr($line, 0, 19);
-            $message = substr($line, 21);
-            
-            if (preg_match('/^Starting (automatic|manual) backup/', $message)) {
-                $start = $date;
-            } elseif (preg_match('/^Backup completed successfully/', $message)) {
-                if ($start) {
-                    $this->duration = strtotime($date) - strtotime($start);
-                } else {
-                    $this->duration = 0;
+            // Parse log data
+            $start = ''; // Start date
+            foreach (explode("\n", $data) as $line) {
+                $date = substr($line, 0, 19);
+                $message = substr($line, 21);
+                
+                if (preg_match('/^Starting (automatic|manual) backup/', $message)) {
+                    $start = $date;
+                } elseif (preg_match('/^Backup completed successfully/', $message)) {
+                    if ($start) {
+                        $this->duration = strtotime($date) - strtotime($start);
+                    } else {
+                        $this->duration = 0;
+                    }
+                    $this->last_success = $date;
+                } elseif (preg_match('/^Backup failed/', $message)) {
+                    $this->last_failure = $date;
+                    $this->last_failure_msg = $message;
                 }
-                $this->last_success = $date;
-            } elseif (preg_match('/^Backup failed/', $message)) {
-                $this->last_failure = $date;
-                $this->last_failure_msg = $message;
             }
-        }
             
         } else { // Else process with new XML handler    
             

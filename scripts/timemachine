@@ -66,6 +66,9 @@ def get_time_machine():
         out['snapshot_count'] = len(out["Destinations"][0]["SnapshotDates"])
         out['latestSnapshotDate'] = str(out["Destinations"][0]["SnapshotDates"][out['snapshot_count']-1])
         out['earliest_snapshot_date'] = str(out["Destinations"][0]["SnapshotDates"][0])
+        if "LastKnownVolumeName" in out["Destinations"][0]:
+            out['alias_volume_name'] = str(out["Destinations"][0]["LastKnownVolumeName"]) # This is new with macOS 15
+        
   
     # Check if higher than 10.8 (Darwin 12) and lower than Ventura (Darwin 22) and extract extra data from Time Machine menu item. Extraction does not work on less than 10.8 (Darwin 12) or greater than Monterey (Darwin 21)
     if getDarwinVersion() > 12 and getDarwinVersion() < 22:
@@ -112,7 +115,7 @@ def get_time_machine():
             if tm_alias.volume.posix_path != None:
                 out['mount_point'] = tm_alias.volume.posix_path
 
-            if tm_alias.target.filename != None:
+            if tm_alias.target.filename != None and 'alias_volume_name' not in out:
                 out['alias_volume_name'] = tm_alias.target.filename
 
             if tm_alias.target.folder_name != None:
